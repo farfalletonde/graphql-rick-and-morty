@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Rick and Morty</string>
+
+    <string name="id">#id: </string>
+    <string name="name">Name: </string>
+    <string name="location">Location: </string>
+
+    <string name="filter">Filter</string>
+    <string name="rick">Rick</string>
+    <string name="morty">Morty</string>
 </resources>
