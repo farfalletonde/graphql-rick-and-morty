@@ -1,0 +1,11 @@
+query getCharacters($page: Int = 1, $filter: FilterCharacter){
+    characters(page: $page, filter: $filter) {
+        results {
+            id
+            name
+            location {
+                name
+            }
+        }
+    }
+}
