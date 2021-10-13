@@ -23,13 +23,18 @@ constructor(private val repository: AppRepository): ViewModel() {
     val charactersData: LiveData<StateResource<List<GetCharactersQuery.Result?>>>
         get() = _charactersData
 
-    fun getData() : LiveData<StateResource<List<GetCharactersQuery.Result?>>> {
+    init {
+        getData(1)
+    }
+
+    fun getData(page: Int) : LiveData<StateResource<List<GetCharactersQuery.Result?>>> {
 
         _charactersData.postValue(StateResource.Loading())
 
         viewModelScope.launch {
 
-            repository.getCharacters(1).enqueue(object: ApolloCall.Callback<GetCharactersQuery.Data>() {
+            _charactersData.postValue(StateResource.Loading())
+            repository.getCharacters(page).enqueue(object: ApolloCall.Callback<GetCharactersQuery.Data>() {
 
                 override fun onResponse(response: Response<GetCharactersQuery.Data>) {
                     val responseData = response.data

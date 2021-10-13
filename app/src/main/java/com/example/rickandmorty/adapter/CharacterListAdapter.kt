@@ -2,40 +2,53 @@ package com.example.rickandmorty.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.GetCharactersQuery
-import com.example.rickandmorty.R
+import com.example.rickandmorty.MyApplication
+import com.example.rickandmorty.databinding.CharacterListItemBinding
 
 class CharacterListAdapter(
-    private val dataset: List<GetCharactersQuery.Result?>,
-    private val context: Context
+    private val dataset: ArrayList<GetCharactersQuery.Result?>
     ): RecyclerView.Adapter<CharacterListAdapter.ItemViewHolder>() {
 
-    inner class ItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val characterImage: ImageView = view.findViewById(R.id.characterImage)
-        val characterId: TextView = view.findViewById(R.id.idOfCharacter)
-        val characterName: TextView = view.findViewById(R.id.nameOfCharacter)
-        val characterLocation: TextView = view.findViewById(R.id.locationOfCharacter)
+    class ItemViewHolder(private val binding: CharacterListItemBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: GetCharactersQuery.Result?) {
+            binding.data = data
+            // make sure to include this so your view will be updated
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ItemViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = CharacterListItemBinding.inflate(layoutInflater, parent, false)
+
+                return ItemViewHolder(binding)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.character_list_item, parent, false))
+        return ItemViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
 
-        holder.apply {
-            Glide.with(context).load(item!!.image).into(characterImage)
-            characterId.text = item.id
-            characterName.text = item.name
-            characterLocation.text = item.location!!.name
+        holder.bind(item)
+    }
+
+    companion object {
+        @BindingAdapter("imageUrl")
+        @JvmStatic
+        fun bindImage(imageView: ImageView, imageUrl: String) {
+            Glide.with(MyApplication.applicationContext())
+                .load(imageUrl)
+                .into(imageView)
         }
     }
 
