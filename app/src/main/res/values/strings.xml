@@ -8,4 +8,6 @@
     <string name="filter">Filter</string>
     <string name="rick">Rick</string>
     <string name="morty">Morty</string>
+
+    <string name="next_page">Next Page</string>
 </resources>

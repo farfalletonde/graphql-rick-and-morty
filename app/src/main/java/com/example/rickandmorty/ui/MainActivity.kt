@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var arrayList = ArrayList<GetCharactersQuery.Result?>()
 
     private var page = 1
+    private var filter = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +52,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         //handles filter operations
-        filterMenuOperations()
-
-        //next page check
-        binding.nextPageButton.setOnClickListener {
-            page++
-            nextPage(page)
-        }
-    }
-
-    fun filterMenuOperations() {
         val filterButton = binding.filterButton
         filterButton.setOnClickListener {
             val popupMenu = PopupMenu(this , it)
@@ -69,13 +60,23 @@ class MainActivity : AppCompatActivity() {
 
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { menuItem ->
                 arrayList.removeAll(arrayList)
-                viewModel.getData(1, menuItem.title.toString())
+                filter = menuItem.title.toString()
+                page = 1
+                viewModel.getData(page, menuItem.title.toString())
                 return@OnMenuItemClickListener true
             })
             popupMenu.show()
         }
+
+
+        //next page check
+        binding.nextPageButton.setOnClickListener {
+            page++
+            getPage(page, filter)
+        }
     }
-    fun nextPage(page: Int, filter: String = "") {
+
+    fun getPage(page: Int, filter: String = "") {
         viewModel.getData(page, filter)
     }
 }
