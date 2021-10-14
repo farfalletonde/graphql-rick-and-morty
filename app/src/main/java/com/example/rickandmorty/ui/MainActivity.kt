@@ -2,16 +2,20 @@ package com.example.rickandmorty.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.apollographql.apollo.exception.ApolloNetworkException
 import com.example.GetCharactersQuery
 import com.example.rickandmorty.R
 import com.example.rickandmorty.adapter.CharacterListAdapter
 import com.example.rickandmorty.databinding.ActivityMainBinding
 import com.example.rickandmorty.util.StateResource
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.NullPointerException
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -46,7 +50,14 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is StateResource.Error -> {
-
+                    when (state.e) {
+                        is NullPointerException -> {
+                            Toast.makeText(this, "No more data were found", Toast.LENGTH_SHORT).show()
+                        }
+                        is ApolloNetworkException -> {
+                            binding.nextPageButton.text = "No internet connection"
+                        }
+                    }
                 }
             }
         }

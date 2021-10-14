@@ -38,10 +38,11 @@ constructor(private val repository: AppRepository): ViewModel() {
             repository.getCharacters(page, filter).enqueue(object: ApolloCall.Callback<GetCharactersQuery.Data>() {
 
                 override fun onResponse(response: Response<GetCharactersQuery.Data>) {
-                    val responseData = response.data
-                    if (responseData != null) {
-                        _charactersData.postValue(StateResource.Success(responseData.characters!!.results!!))
-                        Log.e("MainA", responseData.characters.toString())
+                    try {
+                        _charactersData.postValue(StateResource.Success(response.data!!.characters!!.results!!))
+                    }
+                    catch (e: Exception) {
+                        _charactersData.postValue(StateResource.Error(e))
                     }
                 }
 
