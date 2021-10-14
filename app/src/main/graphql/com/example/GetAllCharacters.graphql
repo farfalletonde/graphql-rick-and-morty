@@ -1,5 +1,5 @@
-query getCharacters($page: Int = 1, $filter: FilterCharacter){
-    characters(page: $page, filter: $filter) {
+query getCharacters($page: Int = 1, $filter: String){
+    characters(page: $page, filter: {name: $filter}) {
         results {
             image
             id

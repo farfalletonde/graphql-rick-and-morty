@@ -1,5 +1,6 @@
 package com.example.rickandmorty.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,22 +25,23 @@ constructor(private val repository: AppRepository): ViewModel() {
         get() = _charactersData
 
     init {
-        getData(1)
+        getData(1, "")
     }
 
-    fun getData(page: Int) : LiveData<StateResource<List<GetCharactersQuery.Result?>>> {
+    fun getData(page: Int, filter: String) : LiveData<StateResource<List<GetCharactersQuery.Result?>>> {
 
         _charactersData.postValue(StateResource.Loading())
 
         viewModelScope.launch {
 
             _charactersData.postValue(StateResource.Loading())
-            repository.getCharacters(page).enqueue(object: ApolloCall.Callback<GetCharactersQuery.Data>() {
+            repository.getCharacters(page, filter).enqueue(object: ApolloCall.Callback<GetCharactersQuery.Data>() {
 
                 override fun onResponse(response: Response<GetCharactersQuery.Data>) {
                     val responseData = response.data
                     if (responseData != null) {
                         _charactersData.postValue(StateResource.Success(responseData.characters!!.results!!))
+                        Log.e("MainA", responseData.characters.toString())
                     }
                 }
 

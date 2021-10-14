@@ -14,6 +14,6 @@ class AppRepository
 @Inject
 constructor(private val apolloClient: ApolloClient) {
 
-    fun getCharacters(page: Int) = apolloClient.query(GetCharactersQuery(Input.optional(page), Input.absent()))
+    fun getCharacters(page: Int, filter: String) = apolloClient.query(GetCharactersQuery(Input.optional(page), Input.optional(filter)))
 
 }
