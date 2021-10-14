@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private var arrayList = ArrayList<GetCharactersQuery.Result?>()
 
+    private var page = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -37,9 +39,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is StateResource.Success -> {
-                    for (item in state.data) {
+                    for (item in state.data)
                         arrayList.add(item)
-                    }
                     recyclerView.adapter!!.notifyDataSetChanged()
                 }
 
@@ -49,8 +50,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //handles filter operations
         filterMenuOperations()
 
+        //next page check
+        binding.nextPageButton.setOnClickListener {
+            page++
+            nextPage(page)
+        }
     }
 
     fun filterMenuOperations() {
@@ -67,5 +74,8 @@ class MainActivity : AppCompatActivity() {
             })
             popupMenu.show()
         }
+    }
+    fun nextPage(page: Int, filter: String = "") {
+        viewModel.getData(page, filter)
     }
 }
