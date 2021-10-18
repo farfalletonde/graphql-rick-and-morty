@@ -2,9 +2,7 @@ package com.example.rickandmorty.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,14 +12,13 @@ import com.example.rickandmorty.R
 import com.example.rickandmorty.adapter.CharacterListAdapter
 import com.example.rickandmorty.databinding.ActivityMainBinding
 import com.example.rickandmorty.util.StateResource
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.NullPointerException
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel by viewModel<MainViewModel>()
     private lateinit var recyclerView: RecyclerView
     private var arrayList = ArrayList<GetCharactersQuery.Result?>()
 

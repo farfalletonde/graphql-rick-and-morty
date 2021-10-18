@@ -1,4 +1,4 @@
-query getCharacters($page: Int = 1, $filter: String){
+query getCharacters($page: Int = 1, $filter: String) {
     characters(page: $page, filter: {name: $filter}) {
         results {
             image
@@ -6,6 +6,9 @@ query getCharacters($page: Int = 1, $filter: String){
             name
             location {
                 name
+            }
+            episode {
+                id
             }
         }
     }
