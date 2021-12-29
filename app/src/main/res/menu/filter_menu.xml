@@ -7,6 +7,6 @@
         <item android:id="@+id/filterByMorty"
             android:title="@string/morty"/>
         <item android:id="@+id/filterBySummer"
-            android:title="Summer"/>
+            android:title="@string/summer"/>
     </group>
 </menu>

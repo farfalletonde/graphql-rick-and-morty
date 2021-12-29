@@ -17,74 +17,69 @@ import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<MainViewModel>()
-    private lateinit var recyclerView: RecyclerView
     private var arrayList = ArrayList<GetCharactersQuery.Result?>()
 
     private var page = 1
-    private var filter = ""
+    private var filter: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main).apply {
+            charactersRw.adapter = CharacterListAdapter(arrayList)
 
-        recyclerView = binding.charactersRw
-        recyclerView.adapter = CharacterListAdapter(arrayList)
+            viewModel.charactersData.observe(this@MainActivity) { state ->
 
-        viewModel.charactersData.observe(this) { state ->
-            viewModel
-            when (state) {
+                when (state) {
 
-                is StateResource.Loading -> {
+                    is StateResource.Loading -> { }
 
-                }
-
-                is StateResource.Success -> {
-                    for (item in state.data)
-                        arrayList.add(item)
-                    recyclerView.adapter!!.notifyDataSetChanged()
-                }
-
-                is StateResource.Error -> {
-                    when (state.e) {
-                        is NullPointerException -> {
-                            Toast.makeText(this, "No more data were found", Toast.LENGTH_SHORT).show()
+                    is StateResource.Success -> {
+                        state.data.forEach {
+                            arrayList.add(it)
                         }
-                        is ApolloNetworkException -> {
-                            binding.nextPageButton.text = "No internet connection"
+                        charactersRw.adapter?.notifyDataSetChanged()
+                    }
+
+                    is StateResource.Error -> {
+                        when (state.e) {
+                            is NullPointerException -> {
+                                Toast.makeText(this@MainActivity, "No more data were found", Toast.LENGTH_SHORT).show()
+                            }
+                            is ApolloNetworkException -> {
+                                nextPageButton.text = "No internet connection"
+                            }
                         }
                     }
                 }
             }
-        }
 
-        //handles filter operations
-        val filterButton = binding.filterButton
-        filterButton.setOnClickListener {
-            val popupMenu = PopupMenu(this , it)
+            //handles filter operations
+            filterButton.setOnClickListener {
+                val popupMenu = PopupMenu(this@MainActivity , it)
 
-            popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
+                popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
 
-            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { menuItem ->
-                arrayList.removeAll(arrayList)
-                filter = menuItem.title.toString()
-                page = 1
-                viewModel.getData(page, menuItem.title.toString())
-                return@OnMenuItemClickListener true
-            })
-            popupMenu.show()
-        }
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    arrayList.removeAll(arrayList)
+                    filter = menuItem.title.toString()
+                    page = 1
+                    viewModel.getData(page, menuItem.title.toString())
+                    true
+                }
+                popupMenu.show()
+            }
 
 
-        //next page check
-        binding.nextPageButton.setOnClickListener {
-            page++
-            getPage(page, filter)
+            //next page check
+            nextPageButton.setOnClickListener {
+                page++
+                getPage(page, filter)
+            }
         }
     }
 
-    fun getPage(page: Int, filter: String = "") {
+    private fun getPage(page: Int, filter: String? = null) {
         viewModel.getData(page, filter)
     }
 }

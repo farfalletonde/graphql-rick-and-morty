@@ -1,6 +1,5 @@
 package com.example.rickandmorty.di
 
-import com.apollographql.apollo.ApolloClient
 import com.example.rickandmorty.graphql.ApolloInstance
 import com.example.rickandmorty.repository.AppRepository
 import com.example.rickandmorty.ui.MainViewModel

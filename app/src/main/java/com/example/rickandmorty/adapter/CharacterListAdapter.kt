@@ -16,9 +16,10 @@ class CharacterListAdapter(
 
     class ItemViewHolder(private val binding: CharacterListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GetCharactersQuery.Result?) {
-            binding.data = data
-            // make sure to include this so your view will be updated
-            binding.executePendingBindings()
+            binding.apply {
+                item = data
+                executePendingBindings()
+            }
         }
 
         companion object {
@@ -38,7 +39,7 @@ class CharacterListAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
 
-        holder.bind(item)
+        holder.bind(dataset[position])
     }
 
     companion object {

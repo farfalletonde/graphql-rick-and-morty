@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="data"
+            name="item"
             type="com.example.GetCharactersQuery.Result" />
     </data>
 
@@ -29,7 +29,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:imageUrl="@{data.image}"
+                app:imageUrl="@{item.image}"
                 tools:ignore="contentDescription"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="@{data.id}"
+                android:text="@{item.id}"
                 app:layout_constraintStart_toEndOf="@+id/idTw"
                 app:layout_constraintTop_toBottomOf="@+id/characterImage" />
 
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="56dp"
-                android:text="@{data.name}"
+                android:text="@{item.name}"
                 app:layout_constraintStart_toEndOf="@+id/nameTw"
                 app:layout_constraintTop_toBottomOf="@+id/characterImage" />
 
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="@{data.location.name}"
+                android:text="@{item.location.name}"
                 app:layout_constraintStart_toEndOf="@+id/locationTw"
                 app:layout_constraintTop_toBottomOf="@+id/nameTw" />
 
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="@{String.valueOf(data.episode.size())}"
+                android:text="@{String.valueOf(item.episode.size())}"
                 app:layout_constraintStart_toEndOf="@+id/locationTw"
                 app:layout_constraintTop_toBottomOf="@+id/locationOfCharacter" />
 
